@@ -1,0 +1,33 @@
+from app.database.database import get_db
+from app.models.user import User
+from app.schemas.auth import LoginRequest
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
+from app.schemas.user import UserResponse
+from app.utils.password import verify_password
+from app.utils.jwt import create_access_token
+
+router = APIRouter(prefix="/auth", tags=["权限验证"])
+
+
+@router.post("/login")
+def login(data: LoginRequest, db: Session = Depends(get_db)):
+    #根据用户账号查询信息
+    user = db.query(User).filter(User.username == data.username).first()
+    # 判断账号密码是否正确
+    if not user or not verify_password(data.password, user.password):
+        return {"code": 400, "message": "账号或密码错误"}
+    #验证账号状态
+    if user.status!=1:
+        return {"code":403,"message":"账号已经被禁用"}
+    #创建token
+    token = create_access_token(user.id)
+    #返回信息
+    return {
+        'code': 200,
+        "message": "操作成功",
+        "data": {
+            "token": token,
+            "user": UserResponse.model_validate(user)
+        }
+    }

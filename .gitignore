@@ -1,0 +1,26 @@
+# Environment variables and local environments
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+
+# Dependencies and generated output
+node_modules/
+dist/
+dist-ssr/
+coverage/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# Logs
+*.log
+logs/
+
+# IDE and operating system files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
