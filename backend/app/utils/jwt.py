@@ -3,8 +3,6 @@ import jwt
 from app.config import settings
 
 """ 创建jwt token"""
-
-
 def create_access_token(user_id: int) -> str:
     # 设定的时间
     expire = datetime.now() + timedelta(hours=settings.JWT_EXPIRE_HOURS)
@@ -20,7 +18,6 @@ def create_access_token(user_id: int) -> str:
 
 
 """ 解析jwt token"""
-
 def decode_access_token(token: str) -> dict:
     return jwt.decode(
         token,
