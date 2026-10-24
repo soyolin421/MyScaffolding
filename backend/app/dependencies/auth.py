@@ -8,6 +8,8 @@ from app.utils.jwt import decode_access_token
 
 from app.database.database import get_db
 
+# 在实际请求中，OAuth2PasswordBearer
+# 会从 Authorization: Bearer <token> 提取 token，供 get_current_user 验证。
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 
 # 用于jwt token鉴权合法性

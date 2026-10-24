@@ -16,18 +16,21 @@
           <div style="margin-left: 5px">智能实验室预约系统</div>
         </div>
         <div >
-          <el-dropdown style="display: flex; align-items: center;cursor: pointer;">
-          <img
-            src="@/assets/imgs/user.png"
-            alt="用户头像"
-            style="width: 30px; border-radius: 20%"
-          />
-          <div style="margin-left: 5px">管理员</div>
+          <el-dropdown >
+            <div style="display: flex; align-items: center;cursor: pointer;">
+              <img
+              src="@/assets/imgs/user.png"
+              alt="用户头像"
+              style="width: 30px; border-radius: 20%"
+              />
+              <div style="margin-left: 10px">管理员</div>
+            </div>
             <template #dropdown>
-              <el-dropdown-menu>
-                <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
-              </el-dropdown-menu>
-            </template>
+                <el-dropdown-menu>
+                  <el-dropdown-item @click="handleLogout">退出登录</el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+        
           </el-dropdown>
 
           
@@ -64,9 +67,11 @@
 
 <script setup>
 import router from '@/router';
+import { logout } from '@/utils/auth';
 import { Document, House, Menu as IconMenu, Location, Setting, User } from '@element-plus/icons-vue'
 
-const logout = ()=>{
+const handleLogout = ()=>{
+  logout()
   router.push('/login')
 } 
 

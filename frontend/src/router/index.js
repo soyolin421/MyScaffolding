@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { getToken } from "@/utils/auth"
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,6 +46,17 @@ const router = createRouter({
       component:()=>import('@/views/Register.vue')
     }
   ]
+})
+
+
+//路由守卫
+router.beforeEach((to,from)=>{
+  const token = getToken()
+  if (to.path === '/login' || to.path === '/register'){
+    return true
+  }else{
+    return token ? true : '/login'
+  }
 })
 
 export default router

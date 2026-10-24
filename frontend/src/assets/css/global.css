@@ -48,3 +48,7 @@ a {
 img {
   max-width: 100%;
 }
+/* 个别样式自定义处理 */
+.el-tooltip__trigger{
+  outline: none !important;
+}
