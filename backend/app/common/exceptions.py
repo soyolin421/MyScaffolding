@@ -28,9 +28,13 @@ async def http_exception_handler(request: Request, exc: HTTPException):
     )
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
     #参数异常处理器
+    errors = [
+        {"loc": error["loc"], "msg": error["msg"], "type": error["type"]}
+        for error in exc.errors()
+    ]
     return JSONResponse(
         status_code=422,
-        content=Response.error(code=422, message="请求参数校验错误").model_dump()
+        content=Response(code=422, message="请求参数校验错误", data=errors).model_dump()
     )
 
 async def global_exception_handler(request: Request, exc: Exception):
