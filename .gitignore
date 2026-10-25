@@ -4,6 +4,7 @@
 !.env.example
 .venv/
 venv/
+uploads/
 
 # Dependencies and generated output
 node_modules/

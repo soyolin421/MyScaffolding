@@ -38,4 +38,5 @@ def register(db: Session, data: RegisterRequest):
     )
     db.add(user_model)
     db.commit()
-    db.flush()
+    # 更新用户id
+    db.refresh(user_model)
