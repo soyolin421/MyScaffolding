@@ -4,7 +4,7 @@
       <h1 style="font-size: 30px">实验室预约系统</h1>
       <div style="margin-top: 5px; margin-bottom: 30px">基于Agent智能预约系统</div>
 
-      <el-form :model="form" label-width="auto" style="max-width: 600px">
+      <el-form :model="form" label-width="0" style="max-width: 100%">
         <el-form-item>
           <el-input
             size="large"
@@ -24,9 +24,20 @@
           />
         </el-form-item>
         <div>
-          <el-button size="large" type="primary" style="width: 100%" @click="login" :loading="loadingValue" >登 录</el-button>
+          <el-button
+            size="large"
+            type="primary"
+            style="width: 100%"
+            @click="login"
+            :loading="loadingValue"
+            >登 录</el-button
+          >
           <div style="text-align: right; margin-top: 20px">
-            还没有账号？请<a href="/register" style="margin-left: 3px; color: var(--el-color-primary)">注册</a>
+            还没有账号？请<router-link
+              to="/register"
+              style="margin-left: 3px; color: var(--el-color-primary)"
+              >注册</router-link
+            >
           </div>
         </div>
       </el-form>
@@ -35,33 +46,36 @@
 </template>
 
 <script setup>
-import { reactive,ref} from 'vue'
-import { User ,Lock} from '@element-plus/icons-vue'
-import { ElMessage } from 'element-plus';
+import { reactive, ref } from 'vue'
+import { User, Lock } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
 import router from '@/router'
-import { loginApi } from '@/api/auth';
-import { useUser } from '@/utils/user';
+import { loginApi } from '@/api/auth'
+import { useUser } from '@/utils/user'
 
-const {saveLoginData} = useUser()
+const { saveLoginData } = useUser()
 
 const form = reactive({
   username: '',
   password: ''
 })
 
-const login = async()=>{
-  loadingValue.value= true
-  const res = await loginApi(form)
-  loadingValue.value= false
-  if (res.code == 200){
-    saveLoginData(res.data)
-    ElMessage.success('登录成功啦')
-    router.push('/manager/home')
+const login = async () => {
+  loadingValue.value = true
+  try {
+    const res = await loginApi(form)
+
+    if (res.code == 200) {
+      saveLoginData(res.data)
+      ElMessage.success('登录成功啦')
+      await router.push('/manager/home')
+    }
+  } finally {
+    loadingValue.value = false
   }
 }
 
 const loadingValue = ref(false)
-
 </script>
 
 <style scoped>

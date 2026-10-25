@@ -1,9 +1,9 @@
 <template>
   <div class="register-container">
     <div class="register-box">
-      <h1 style="font-size: 30px;margin-bottom: 30px;">欢迎注册</h1>
+      <h1 style="font-size: 30px; margin-bottom: 30px">欢迎注册</h1>
 
-      <el-form :model="form" label-width="auto" style="max-width: 600px">
+      <el-form :model="form" label-width="0px" style="width: 100%">
         <el-form-item>
           <el-input
             size="large"
@@ -33,9 +33,15 @@
           />
         </el-form-item>
         <div>
-          <el-button size="large" type="primary" style="width: 100%" @click="register">注 册</el-button>
+          <el-button size="large" type="primary" style="width: 100%" @click="register"
+            >注 册</el-button
+          >
           <div style="text-align: right; margin-top: 20px">
-            已有账号？请<a href="/login" style="margin-left: 3px; color: var(--el-color-primary)">登录</a>
+            已有账号？请<router-link
+              to="/login"
+              style="margin-left: 3px; color: var(--el-color-primary)"
+              >登录</router-link
+            >
           </div>
         </div>
       </el-form>
@@ -52,16 +58,15 @@ import router from '@/router'
 const form = reactive({
   username: '',
   password: '',
-  confirmPassword:''
+  confirmPassword: ''
 })
 
-const register = ()=>{
-  setTimeout(()=>{
+const register = () => {
+  setTimeout(() => {
     ElMessage.success('注册成功')
     router.push('/login')
-  },2000)
+  }, 2000)
 }
-
 </script>
 
 <style scoped>
