@@ -3,8 +3,8 @@
     <div class="register-box">
       <h1 style="font-size: 30px; margin-bottom: 30px">欢迎注册</h1>
 
-      <el-form :model="form" label-width="0px" style="width: 100%">
-        <el-form-item>
+      <el-form ref="formRef" :rules="rules" :model="form" label-width="0px" style="width: 100%">
+        <el-form-item prop="username">
           <el-input
             size="large"
             v-model="form.username"
@@ -12,28 +12,28 @@
             :prefix-icon="User"
           />
         </el-form-item>
-        <el-form-item>
+        <el-form-item prop="password">
           <el-input
             type="password"
             size="large"
             v-model="form.password"
             placeholder="请输入密码"
-            :prefix-icon="lock"
+            :prefix-icon="Lock"
             show-password
           />
         </el-form-item>
-        <el-form-item>
+        <el-form-item prop="confirmPassword">
           <el-input
             type="password"
             size="large"
             v-model="form.confirmPassword"
             placeholder="请确认输入的密码"
-            :prefix-icon="lock"
+            :prefix-icon="Lock"
             show-password
           />
         </el-form-item>
         <div>
-          <el-button size="large" type="primary" style="width: 100%" @click="register"
+          <el-button size="large" type="primary" style="width: 100%" :loading="loadingValue" @click="register"
             >注 册</el-button
           >
           <div style="text-align: right; margin-top: 20px">
@@ -50,10 +50,12 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue'
-import { User } from '@element-plus/icons-vue'
+import { reactive,ref} from 'vue'
+import { User ,Lock} from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
+import { registerApi } from '@/api/auth'
 import router from '@/router'
+
 
 const form = reactive({
   username: '',
@@ -61,11 +63,42 @@ const form = reactive({
   confirmPassword: ''
 })
 
-const register = () => {
-  setTimeout(() => {
-    ElMessage.success('注册成功')
-    router.push('/login')
-  }, 2000)
+const formRef = ref()
+
+const loadingValue = ref(false)
+
+const validatePass = (rule, value, callback) => {
+  if (value === '') {
+    callback(new Error('请确认密码'))
+  } else {
+    if (value !== form.password){
+      callback(new Error('两次密码输入不一致'))
+    }else{
+      callback()
+    }
+  }
+}
+
+const rules = {
+  username:[{required:true,message:'请输入账号',trigger:'blur'}],
+  password:[{required:true,message:'请输入密码',trigger:'blur'}],
+  confirmPassword:[{ validator: validatePass, trigger: 'blur' }]
+}
+
+const register = async() => {
+  const valid = await formRef.value.validate().catch(()=>false)
+  if (!valid) return
+  loadingValue.value = true
+  try {
+    const res = await registerApi(form)
+
+    if (res.code == 200) {
+      ElMessage.success('注册成功啦')
+      await router.push('/login')
+    }
+  } finally {
+    loadingValue.value = false
+  }
 }
 </script>
 

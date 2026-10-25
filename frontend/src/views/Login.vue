@@ -57,6 +57,7 @@ import { useUser } from '@/utils/user'
 const { saveLoginData } = useUser()
 
 const formRef = ref()
+const loadingValue = ref(false)
 
 const rules = {
   username:[{required:true,message:'请输入账号',trigger:'blur'}],
@@ -86,7 +87,7 @@ const login = async () => {
   }
 }
 
-const loadingValue = ref(false)
+
 </script>
 
 <style scoped>
