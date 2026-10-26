@@ -15,26 +15,19 @@
           <img style="width: 30px" src="@/assets/imgs/logo.png" alt="logo" />
           <div style="margin-left: 5px">智能实验室预约系统</div>
         </div>
-        <div >
-          <el-dropdown >
-            <div style="display: flex; align-items: center;cursor: pointer;">
-              <img
-              :src="userInfo?.avatar"
-              alt="用户头像"
-              style="width: 30px; border-radius: 20%"
-              />
+        <div>
+          <el-dropdown @command="handleCommand">
+            <div style="display: flex; align-items: center; cursor: pointer">
+              <img :src="userInfo?.avatar" alt="用户头像" style="width: 30px; border-radius: 20%" />
               <div style="margin-left: 10px">{{ userInfo.name }}</div>
             </div>
             <template #dropdown>
-                <el-dropdown-menu>
-                  <el-dropdown-item @click="goPerson">个人信息</el-dropdown-item>
-                  <el-dropdown-item @click="handleLogout">退出登录</el-dropdown-item>
-                </el-dropdown-menu>
-              </template>
-        
+              <el-dropdown-menu>
+                <el-dropdown-item command="profile">个人信息</el-dropdown-item>
+                <el-dropdown-item command="logout">退出登录</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
           </el-dropdown>
-
-          
         </div>
       </el-header>
       <el-container>
@@ -67,21 +60,20 @@
 </template>
 
 <script setup>
-import router from '@/router';
-import { logout } from '@/utils/auth';
+import router from '@/router'
+import { logout } from '@/utils/auth'
 import { Document, House, Menu as IconMenu, Location, Setting, User } from '@element-plus/icons-vue'
-import { useUser } from '@/utils/user';
-
+import { useUser } from '@/utils/user'
+import { ElMessage } from 'element-plus'
 
 const { userInfo } = useUser()
 
-const handleLogout = ()=>{
-  logout()
-  router.push('/login')
-} 
-
-const goPerson =()=>{
-  router.push('/manager/profile')
+const handleCommand = (command) => {
+  if (command === 'profile') {
+    router.push('/manager/profile')
+  } else if (command === 'logout') {
+    logout()
+    router.push('/login')
+  }
 }
-
 </script>

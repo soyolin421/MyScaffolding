@@ -12,7 +12,7 @@ from app.services import user_service
 
 router = APIRouter(prefix="/user", tags=["用户信息的接口"])
 
-@router.get("/info")
+@router.get("/me")
 def get_user_info(current_user:User = Depends(get_current_user)):
     """获取当前用户信息"""
     return Response.success(data=user_service.get_user_info(current_user))
@@ -20,7 +20,7 @@ def get_user_info(current_user:User = Depends(get_current_user)):
 
 
 #更新当前用户信息的接口
-@router.put("/update")
+@router.put("/me")
 #     current_user:User = Depends(get_current_user) 为了校验token
 def update_user_info(data: UserUpdateRequest,
                      current_user:User = Depends(get_current_user),
