@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { getToken } from "@/utils/auth"
-
+import { getToken } from '@/utils/auth'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,11 +27,17 @@ const router = createRouter({
           path: 'equ',
           name: 'Equ',
           component: () => import('@/views/Equ.vue')
-        },{
+        },
+        {
           path: 'user',
           name: 'User',
           component: () => import('@/views/User.vue')
         },
+        {
+          path: 'profile',
+          name: 'Profile',
+          component: () => import('@/views/Profile.vue')
+        }
       ]
     },
     {
@@ -43,18 +48,17 @@ const router = createRouter({
     {
       path: '/register',
       name: 'Register',
-      component:()=>import('@/views/Register.vue')
+      component: () => import('@/views/Register.vue')
     }
   ]
 })
 
-
 //路由守卫
-router.beforeEach((to,from)=>{
+router.beforeEach((to, from) => {
   const token = getToken()
-  if (to.path === '/login' || to.path === '/register'){
+  if (to.path === '/login' || to.path === '/register') {
     return true
-  }else{
+  } else {
     return token ? true : '/login'
   }
 })
