@@ -13,10 +13,21 @@
         :rules="rules"
         :model="form"
         label-width="100px"
-        style="width: 80%; padding-right: 100px"
+        style="width: 100%; padding-right: 100px"
         v-loading="loading"
       >
-        <el-form-item label="账号" >
+        <el-form-item label="头像">
+          <el-upload
+            class="avatar-uploader"
+            :http-request="handleFileUpload"
+            :show-file-list="false"
+            :before-upload="beforeAvatarUpload"
+          >
+            <img v-if="form.avatar" :src="form.avatar" class="avatar" />
+            <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+          </el-upload>
+        </el-form-item>
+        <el-form-item label="账号">
           <el-input disabled v-model="form.username" placeholder="请输入账号" />
         </el-form-item>
         <el-form-item label="名称" prop="name">
@@ -31,10 +42,9 @@
         <el-form-item label="手机号" prop="phone">
           <el-input v-model="form.phone" placeholder="请输入手机号" />
         </el-form-item>
-        <el-form-item >
-          <el-button type="primary":loading="submitting" @click="handleSubmit">保存修改</el-button>
+        <el-form-item>
+          <el-button type="primary" :loading="submitting" @click="handleSubmit">保存修改</el-button>
         </el-form-item>
-        
       </el-form>
     </el-card>
   </div>
@@ -42,7 +52,8 @@
 
 <script setup>
 import { getUserInfo, updateUserInfo } from '@/api/user'
-import { ref, reactive, onMounted,computed} from 'vue'
+import { ref, reactive, onMounted, computed } from 'vue'
+import { uploadFileApi } from '@/api/file'
 import { ElMessage } from 'element-plus'
 import { useUser } from '@/utils/user'
 
@@ -68,9 +79,31 @@ const rules = {
   phone: [{ pattern: /^1[3-9]\d{9}$/, message: '手机号格式错误', trigger: 'blur' }]
 }
 
-const roleLabel = computed(()=>{
-  return form.role === 'admin'?'管理员':form.role ==='student'?'学生':'未知角色'
+const roleLabel = computed(() => {
+  return form.role === 'admin' ? '管理员' : form.role === 'student' ? '学生' : '未知角色'
 })
+
+const handleFileUpload = async ({ file }) => {
+  try {
+    const res = await uploadFileApi(file)
+    if (res.code === 200) {
+      form.avatar = res.data?.url
+    }
+  } catch {}
+}
+
+const beforeAvatarUpload = (file) => {
+  const imageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+  if (!imageTypes.includes(file.type)) {
+    ElMessage.error('只能上传图片')
+    return false
+  }
+  if (file.size / 1024 / 1024 > 2) {
+    ElMessage.error('上传图片大小不能超过2M')
+    return false
+  }
+  return true
+}
 
 // 将res中的数据逐个赋值给form
 const loadUserInfo = async () => {
@@ -86,25 +119,51 @@ const loadUserInfo = async () => {
 }
 
 //发送请求跟新用户信息
-const handleSubmit = async ()=>{
+const handleSubmit = async () => {
   // 如果里面发生错误返回false，表示表单验证失败
-  const valid = await formRef.value.validate().catch(()=>false)
-  if(!valid) return
-  submitting.value=true
-  try{
+  const valid = await formRef.value.validate().catch(() => false)
+  if (!valid) return
+  submitting.value = true
+  try {
     const res = await updateUserInfo(form)
-    if(res.code === 200){
+    if (res.code === 200) {
       updateUser(res.data)
       ElMessage.success('更新成功')
     }
-  }finally{
-    submitting.value=false
+  } finally {
+    submitting.value = false
   }
 }
 
-onMounted(()=>{
+onMounted(() => {
   loadUserInfo()
-  })
+})
 </script>
 
-<style scoped></style>
+<style scoped>
+.avatar-uploader .avatar {
+  width: 130px;
+  height: 130px;
+  display: block;
+}
+</style>
+<style>
+.avatar-uploader .el-upload {
+  border: 1px dashed var(--el-border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: var(--el-transition-duration-fast);
+}
+.avatar-uploader .el-upload:hover {
+  border-color: var(--el-color-primary);
+}
+.el-icon.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 130px;
+  height: 130px;
+  text-align: center;
+}
+</style>
