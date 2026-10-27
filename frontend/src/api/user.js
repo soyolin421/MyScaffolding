@@ -33,3 +33,14 @@ export function updatePassword(data){
   })
 }
 
+/**
+ * 获取用户列表
+ */
+export function getUserPageList(params){
+  return request({
+    url:'/api/user/list',
+    method:'get',
+    params
+  })
+}
+

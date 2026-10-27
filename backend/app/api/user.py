@@ -36,4 +36,9 @@ def update_password(data:PasswordUpdateRequest,
     return Response.success()
 
 
+@router.get("/list")
+def get_user_list(page: int = 1,page_size:int = 10,keywords:str | None=None,
+                  current_user:User = Depends(get_current_user),db:Session = Depends(get_db)):
+    res = user_service.get_user_page_list(db,page,page_size,keywords)
+    return Response.success(data=res)
 
