@@ -22,3 +22,14 @@ export function updateUserInfo(data){
   })
 }
 
+/**
+ * 修改当前用户的个人密码
+ */
+export function updatePassword(data){
+  return request({
+    url:'/api/user/password',
+    method:'put',
+    data
+  })
+}
+

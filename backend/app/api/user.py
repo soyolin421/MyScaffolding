@@ -5,7 +5,7 @@ from app.dependencies.auth import get_current_user
 from app.common.response import Response
 from app.models.user import User
 from fastapi import APIRouter, Depends
-from app.schemas.user import UserResponse, UserUpdateRequest
+from app.schemas.user import UserResponse, UserUpdateRequest, PasswordUpdateRequest
 from app.services import user_service
 
 
@@ -27,5 +27,13 @@ def update_user_info(data: UserUpdateRequest,
                      db:Session = Depends(get_db)):
     res= user_service.update_user_info(db,current_user,data)
     return Response.success(data=res)
+
+@router.put("/password")
+def update_password(data:PasswordUpdateRequest,
+                    current_user:User = Depends(get_current_user),
+                    db:Session = Depends(get_db)):
+    user_service.update_password(db,current_user,data)
+    return Response.success()
+
 
 
