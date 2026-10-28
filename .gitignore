@@ -4,7 +4,8 @@
 !.env.example
 .venv/
 venv/
-uploads/
+/backend/uploads/*
+!/backend/uploads/.gitkeep
 
 # Dependencies and generated output
 node_modules/
