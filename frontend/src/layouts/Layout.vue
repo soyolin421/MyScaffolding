@@ -46,14 +46,14 @@
               <el-icon><Setting /></el-icon>
               <span>设备列表管理</span>
             </el-menu-item>
-            <el-menu-item index="/manager/user">
+            <el-menu-item index="/manager/user" v-if="userInfo?.role==='admin'">
               <el-icon><User /></el-icon>
               <span>用户管理</span>
             </el-menu-item>
           </el-menu>
         </el-aside>
         <el-main>
-          <router-view />
+          ··<router-view />
         </el-main>
       </el-container>
     </el-container>

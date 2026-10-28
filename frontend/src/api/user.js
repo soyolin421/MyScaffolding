@@ -44,3 +44,38 @@ export function getUserPageList(params){
   })
 }
 
+
+/**
+ * 获取新增用户
+ */
+export function createUserAPI(data){
+  return request({
+    url:'/api/user',
+    method:'post',
+    data
+  })
+}
+
+/**
+ * 获取更新修改用户
+ */
+export function updateUserAPI(userId ,data){
+  return request({
+    url:`/api/user/${userId}`,
+    method:'put',
+    data
+  })
+}
+
+/**
+ * 获取删除修改用户
+ */
+export function deleteUserAPI(userId){
+  return request({
+    url:`/api/user/${userId}`,
+    method:'delete',
+  })
+}
+
+
+

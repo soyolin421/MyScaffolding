@@ -15,7 +15,7 @@ def get_user_info(user: User) -> UserResponse:
 # 修改个人信息
 def update_user_info(db: Session, user: User, data: UserUpdateRequest):
     # 防空的，忽略掉所有是none的属性，pydatic对象转化成字典
-    user_dict = data.model_dump(exclude_none=True)
+    user_dict = data.model_dump(exclude_none=True,exclude={"role","status"})
     for field, value in user_dict.items():
         # 一个个将字典里面的值塞到user中
         setattr(user, field, value)
