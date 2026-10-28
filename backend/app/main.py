@@ -3,7 +3,8 @@ from fastapi import FastAPI, HTTPException
 from fastapi.exceptions import RequestValidationError
 from starlette.middleware.cors import CORSMiddleware
 from starlette.staticfiles import StaticFiles
-
+from app.models.lab import Lab
+from app.models.user import User
 from app.api import api
 from app.config import UPLOAD_DIR
 from app.database.database import Base, engine

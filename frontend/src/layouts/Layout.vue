@@ -38,7 +38,7 @@
               <el-icon><icon-menu /></el-icon>
               <span>系统首页</span>
             </el-menu-item>
-            <el-menu-item index="/manager/lab">
+            <el-menu-item index="/manager/lab" v-if="userInfo?.role === 'admin'">
               <el-icon><House /></el-icon>
               <span>实验室管理</span>
             </el-menu-item>
@@ -46,14 +46,14 @@
               <el-icon><Setting /></el-icon>
               <span>设备列表管理</span>
             </el-menu-item>
-            <el-menu-item index="/manager/user" v-if="userInfo?.role==='admin'">
+            <el-menu-item index="/manager/user" v-if="userInfo?.role === 'admin'">
               <el-icon><User /></el-icon>
               <span>用户管理</span>
             </el-menu-item>
           </el-menu>
         </el-aside>
         <el-main>
-          ··<router-view />
+          <router-view />
         </el-main>
       </el-container>
     </el-container>
@@ -66,14 +66,12 @@ import { logout } from '@/utils/auth'
 import { Document, House, Menu as IconMenu, Location, Setting, User } from '@element-plus/icons-vue'
 import { useUser } from '@/utils/user'
 
-
 const { userInfo } = useUser()
 
 const handleCommand = (command) => {
   if (command === 'profile') {
     router.push('/manager/profile')
-  }
-  else if(command === 'password'){
+  } else if (command === 'password') {
     router.push('/manager/password')
   } else if (command === 'logout') {
     logout()
